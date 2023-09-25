@@ -1,6 +1,12 @@
 FROM --platform=${TARGETPLATFORM:-linux/arm64} ubuntu:22.04
 
-RUN apt update && apt install -y wget curl lsb-release sudo
+ENV LANG=en_US.UTF-8 \
+LANGUAGE=en_US.UTF-8 \
+LC_ALL=en_US.UTF-8 \
+TZ=America/Chicago
+
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN apt update && apt install -y curl wget sudo locales lsb-release
 RUN wget -qO- https://dl.hoobs.org/stable | sudo bash -
 RUN apt install -y hoobsd hoobs-cli hoobs-gui
 RUN apt install -y bluetooth wpasupplicant network-manager avahi-daemon avahi-utils dnsmasq
