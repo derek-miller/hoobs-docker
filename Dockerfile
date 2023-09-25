@@ -12,4 +12,4 @@ VOLUME /hoobs
 WORKDIR /hoobs
 EXPOSE 80/tcp
 
-ENTRYPOINT ["/bin/bash", "-c", "sudo hbs install -p 80; hoobsd hub"]
+ENTRYPOINT ["/bin/bash", "-c", "sudo hbs install -p 80; sudo hoobsd hub"]
