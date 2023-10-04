@@ -9,12 +9,16 @@ on:
   pull_request:
     branches: [ master ]
 
-env:
-  IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/hoobs4
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: hoobs4
+            release: stable
+          - name: hoobs5
+            release: bleeding
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -38,13 +42,14 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.IMAGE_NAME }}
+          images: ${{ secrets.DOCKER_USERNAME }}/${{ matrix.name }}
 
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@v5
         with:
           context: .
+          build-args: RELEASE=${{ matrix.release }}
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}

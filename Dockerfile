@@ -1,7 +1,9 @@
 FROM --platform=${TARGETPLATFORM:-linux/arm64} debian:bullseye
 
+ARG RELEASE=stable
+
 RUN apt update && apt install -y curl wget sudo locales lsb-release
-RUN wget -qO- https://dl.hoobs.org/stable | sudo bash -
+RUN wget -qO- https://dl.hoobs.org/${RELEASE} | sudo bash -
 RUN sudo apt install -y hoobsd hoobs-cli hoobs-gui
 RUN sudo apt clean && sudo rm -rf /var/lib/apt/lists/*
 
